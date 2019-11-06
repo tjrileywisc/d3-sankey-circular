@@ -54,8 +54,9 @@ import findCircuits from "elementary-circuits-directed-graph";
 
 
   // Return the default value for ID for node, d.index
+  // (prefer id key when present)
   function defaultId (d) {
-    return d.index
+    return typeof d['id'] !== 'undefined' ? d['id'] : d.index;
   }
 
   // Return the default object the graph's nodes, graph.nodes
@@ -286,7 +287,9 @@ import findCircuits from "elementary-circuits-directed-graph";
         node.sourceLinks = []
         node.targetLinks = []
       })
-      var nodeById = map(graph.nodes, id)
+      var nodeById = d3Collection.map(graph.nodes, function(d, i) {
+        return typeof d['id'] !== 'undefined' ? d['id'] : i;
+      });
       graph.links.forEach(function (link, i) {
         link.index = i
         var source = link.source
